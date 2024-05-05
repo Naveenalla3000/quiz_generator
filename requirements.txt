@@ -1,0 +1,7 @@
+langchain-google-genai
+langchain
+pandas
+python-dotenv
+fpdf
+pyPDF2
+solara
