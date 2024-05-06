@@ -83,7 +83,7 @@ def generate_response(text,number,subject,tone,response_json):
     pdf_with_answers = MCQPDF(include_answers=True)
     pdf_with_answers.set_author("Hana-AI")
     pdf_with_answers.create_document(data)
-    pdf_with_answers.output(os.path.join(pdfs,'MCQs_With_With_Answers_HanaAi.pdf'))    
+    pdf_with_answers.output(os.path.join(pdfs,'MCQs_With_Answers_HanaAi.pdf'))    
 
 
     pdf_without_answers = MCQPDF(include_answers=False)
