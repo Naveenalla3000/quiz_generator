@@ -140,4 +140,5 @@ def Page():
         solara.Style(
               Path(Path(__file__).parent / "assets/style.css" ))
         Home()
+        Title("AI - Quiz generator")
         
