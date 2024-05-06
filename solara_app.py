@@ -110,7 +110,7 @@ def Home():
             Text("Developed by Naveen Alla",style='margin: auto;padding: 40px;')
 
     with AppLayout(color="pink",
-                   title="AI - Quiz generator",
+                   title="Hana AI - Quiz generator",
                    style='width: 100%;'):
         with AppBar():
             Text("Developed by Naveen Alla")
@@ -140,5 +140,5 @@ def Page():
         solara.Style(
               Path(Path(__file__).parent / "assets/style.css" ))
         Home()
-        Title("AI - Quiz generator")
+        Title("Hana AI - Quiz generator")
         
