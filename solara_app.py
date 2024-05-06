@@ -1,11 +1,12 @@
-from solara import *
-import json
 import os
 import traceback
 import textwrap
+from solara import *
+import json
 from solara.components.file_drop import *
 from source.quizgenerator.quizgenerator import generate_response
 from source.quizgenerator.utils import read_file
+import solara.website.pages
 
 subject = reactive('')
 file = reactive(None)
@@ -13,11 +14,8 @@ number_of_questions:int = reactive(0)
 tones = ['Formal','Informal','Neutral','Professional','Casual']
 tone = reactive(tones[0])
 
-
-pwd = os.getcwd()
-pdfs = pwd + '/media/pdfs/'
-generated_pdf_with_Ans =  os.path.join(pdfs,'MCQs_With_Answers_HanaAi.pdf')
-generated_pdf_without_Ans = os.path.join(pdfs,'MCQs_By_HanaAi.pdf')
+generated_pdf_with_Ans =  Path(Path(__file__).parent / "media/pdfs/MCQs_By_HanaAi.pdf" )
+generated_pdf_without_Ans = Path(Path(__file__).parent / "media/pdfs/MCQs_With_Answers_HanaAi.pdf" )
 
 
 @component
@@ -78,17 +76,22 @@ def Home():
             return False
         with open(os.path.join(os.getcwd())+'/Response.json','r') as file:
             RESPONSE_JSON = json.load(file)
-        response = generate_response(
-        file_content,
-        number_of_questions.value,
-        subject.value,
-        tone.value,
-        json.dumps(RESPONSE_JSON))
-        if response and isinstance(response,list):
-            set_quiz_data(response) 
-            print(quiz_data)
-        else:
-             return
+        try:
+            response = generate_response(
+            file_content,
+            number_of_questions.value,
+            subject.value,
+            tone.value,
+            json.dumps(RESPONSE_JSON))
+            if response and isinstance(response,list):
+                set_quiz_data(response) 
+                print(quiz_data)
+            else:
+                Text("Error in generating the quiz questions. Please try again.")
+        except Exception as e:
+            print(e)
+            traceback.print_exception(type(e), e, e.__traceback__)
+            return
     
     @component
     def GeneratedQuiz():
@@ -124,14 +127,13 @@ def Home():
                         if quiz_data:
                             GeneratedQuiz()
                             GridLayout(cols=2)
-                            with Padding(4):
-                                with Row():
-                                    file_with_ans_object = solara.use_memo(lambda: open(generated_pdf_with_Ans, "rb"), [])
-                                    file_without_ans_object = solara.use_memo(lambda: open(generated_pdf_without_Ans, "rb"), [])
-                                    with FileDownload(file_with_ans_object, 'MCQs_With_Answers_HanaAi.pdf'):
-                                        Button("Download Quiz with Answers", icon_name="mdi-cloud-download-outline", color="pink", style='color: white;')
-                                    with FileDownload(file_without_ans_object, 'MCQs_By_HanaAi.pdf'):
-                                        Button("Download Quiz Only Question", icon_name="mdi-cloud-download-outline", color="pink", style='color: white;')
+                            file_with_ans_object = use_memo(lambda: open(generated_pdf_with_Ans, "rb"), [])
+                            file_without_ans_object = use_memo(lambda: open(generated_pdf_without_Ans, "rb"), [])
+                            with Row(style='width: 100%; justify-content: center; align-items: center;padding: 60px;'):
+                                with FileDownload(file_with_ans_object, 'MCQs_With_Answers_HanaAi.pdf'):
+                                    Button("Download Quiz with Answers", icon_name="mdi-cloud-download-outline", color="pink", style='width: 100%; margin: auto; color: white;')
+                                with FileDownload(file_without_ans_object, 'MCQs_By_HanaAi.pdf'):
+                                    Button("Download Quiz Only Question", icon_name="mdi-cloud-download-outline", color="pink", style='width: 100%; margin: auto; color: white;')   
     Footer()
                                 
             
