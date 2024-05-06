@@ -14,8 +14,10 @@ number_of_questions:int = reactive(0)
 tones = ['Formal','Informal','Neutral','Professional','Casual']
 tone = reactive(tones[0])
 
-generated_pdf_with_Ans =  Path(Path(__file__).parent / "media/pdfs/MCQs_By_HanaAi.pdf" )
-generated_pdf_without_Ans = Path(Path(__file__).parent / "media/pdfs/MCQs_With_Answers_HanaAi.pdf" )
+
+generated_pdf_with_Ans = Path(Path(__file__).parent / "media/pdfs/MCQs_With_Answers_HanaAi.pdf" ) 
+generated_pdf_without_Ans = Path(Path(__file__).parent / "media/pdfs/MCQs_By_HanaAi.pdf" )
+
 
 
 @component
